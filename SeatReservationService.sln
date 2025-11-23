@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeatReservationService", "SeatReservationService\SeatReservationService.csproj", "{A190381A-531D-41FD-8611-8F4C2DAE5213}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeatReservation.Domain", "SeatReservation.Domain\SeatReservation.Domain.csproj", "{3884970B-3393-4BBF-9969-22128F445426}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{C7E2102D-2619-46A6-B226-C1088A74EEA4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A190381A-531D-41FD-8611-8F4C2DAE5213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A190381A-531D-41FD-8611-8F4C2DAE5213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A190381A-531D-41FD-8611-8F4C2DAE5213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A190381A-531D-41FD-8611-8F4C2DAE5213}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3884970B-3393-4BBF-9969-22128F445426}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3884970B-3393-4BBF-9969-22128F445426}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3884970B-3393-4BBF-9969-22128F445426}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3884970B-3393-4BBF-9969-22128F445426}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7E2102D-2619-46A6-B226-C1088A74EEA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7E2102D-2619-46A6-B226-C1088A74EEA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7E2102D-2619-46A6-B226-C1088A74EEA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7E2102D-2619-46A6-B226-C1088A74EEA4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

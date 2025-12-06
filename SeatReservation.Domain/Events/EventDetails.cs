@@ -1,3 +1,5 @@
+using JetBrains.Annotations;
+
 namespace SeatReservation.Domain.Events;
 
 public class EventDetails
@@ -8,7 +10,13 @@ public class EventDetails
         Description = description;
     }
 
-    public Guid EventId { get; } = Guid.Empty;
+    public EventId EventId { get; } = null!;
     public int Capacity { get; private set; }
-    public string Description { get; private set; }
+    public string Description { get; private set; } = null!;
+
+    [UsedImplicitly]
+    private EventDetails()
+    {
+        // EF Core
+    }
 }

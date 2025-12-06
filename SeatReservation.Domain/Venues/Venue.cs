@@ -1,16 +1,19 @@
 using CSharpFunctionalExtensions;
+using JetBrains.Annotations;
 using Shared;
 
 namespace SeatReservation.Domain.Venues;
+
+public record VenueId(Guid Value);
 
 /// <summary>
 /// Площадка
 /// </summary>
 public class Venue
 {
-    private List<Seat> _seats;
+    private List<Seat> _seats = [];
 
-    public Venue(Guid id, string name, int seatsLimit, IEnumerable<Seat> seats)
+    public Venue(VenueId id, VenueName name, int seatsLimit, IEnumerable<Seat> seats)
     {
         Id = id;
         Name = name;
@@ -18,8 +21,8 @@ public class Venue
         _seats = seats.ToList();
     }
 
-    public Guid Id { get; }
-    public string Name { get; private set; }
+    public VenueId Id { get; } = null!;
+    public VenueName Name { get; private set; } = null!;
     public int SeatsLimit { get; private set; }
     public int SeatsCount => _seats.Count;
     public IReadOnlyList<Seat> Seats => _seats;
@@ -37,4 +40,10 @@ public class Venue
     }
 
     public void ExpandSeatsLimit(int newSeatsLimit) => SeatsLimit = newSeatsLimit;
+
+    [UsedImplicitly]
+    private Venue()
+    {
+        // EF Core
+    }
 }

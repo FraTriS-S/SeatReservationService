@@ -1,8 +1,13 @@
+using JetBrains.Annotations;
+using SeatReservation.Domain.Venues;
+
 namespace SeatReservation.Domain.Reservations;
+
+public record ReservationSeatId(Guid Value);
 
 public class ReservationSeat
 {
-    public ReservationSeat(Guid id, Reservation reservation, Guid seatId)
+    public ReservationSeat(ReservationSeatId id, Reservation reservation, SeatId seatId)
     {
         Id = id;
         Reservation = reservation;
@@ -10,8 +15,14 @@ public class ReservationSeat
         ReservedAt = DateTime.UtcNow;
     }
 
-    public Guid Id { get; }
-    public Reservation Reservation { get; private set; }
-    public Guid SeatId { get; private set; }
+    public ReservationSeatId Id { get; } = null!;
+    public Reservation Reservation { get; private set; } = null!;
+    public SeatId SeatId { get; private set; } = null!;
     public DateTime ReservedAt { get; }
+
+    [UsedImplicitly]
+    private ReservationSeat()
+    {
+        // EF Core
+    }
 }

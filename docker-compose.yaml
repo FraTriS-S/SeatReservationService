@@ -1,0 +1,16 @@
+services:
+  postgres_database_course:
+    container_name: postgres_database_course
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: database_course_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-database-course:/var/lib/postgresql/data
+
+volumes:
+  postgres-database-course:

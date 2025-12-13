@@ -31,8 +31,8 @@ public class VenueConfiguration : IEntityTypeConfiguration<Venue>
         builder.Property(x => x.SeatsLimit).HasColumnName("seats_limit").IsRequired();
 
         builder.HasMany(x => x.Seats)
-            .WithOne()
-            .HasForeignKey(x => x.VenueId)
+            .WithOne(x => x.Venue)
+            .HasForeignKey("venue_id")
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
     }

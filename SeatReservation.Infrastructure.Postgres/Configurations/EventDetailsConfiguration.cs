@@ -14,6 +14,8 @@ public class EventDetailsConfiguration : IEntityTypeConfiguration<EventDetails>
 
         builder.Property(x => x.EventId).HasColumnName("event_id")
             .HasConversion(eventId => eventId.Value, id => new EventId(id));
+        builder.Property(x => x.Capacity).HasColumnName("capacity");
+        builder.Property(x => x.Description).HasColumnName("description");
 
         builder.HasOne<Event>()
             .WithOne(x => x.Details)

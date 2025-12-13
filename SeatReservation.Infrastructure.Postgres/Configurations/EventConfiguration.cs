@@ -16,8 +16,9 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
 
         builder.Property(x => x.Id).HasColumnName("id")
             .HasConversion(eventId => eventId.Value, id => new EventId(id));
-
         builder.Property(x => x.VenueId).HasColumnName("venue_id");
+        builder.Property(x => x.Name).HasColumnName("name");
+        builder.Property(x => x.EventDate).HasColumnName("event_date");
         builder.Property(x => x.Type).HasConversion<string>().HasColumnName("type").IsRequired();
         builder.Property(x => x.Info).HasConversion(new EventInfoValueConverter()).HasColumnName("info").IsRequired();
 

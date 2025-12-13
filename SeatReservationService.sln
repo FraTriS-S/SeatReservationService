@@ -8,6 +8,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeatReservation.Infrastructure.Postgres", "SeatReservation.Infrastructure.Postgres\SeatReservation.Infrastructure.Postgres.csproj", "{AD234B03-CCBA-431A-91E6-E84CB61DCBE6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeatReservation.Application", "SeatReservation.Application\SeatReservation.Application.csproj", "{B87955EA-C4F4-4746-8CC8-E1F9085170E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeatReservation.Contracts", "SeatReservation.Contracts\SeatReservation.Contracts.csproj", "{0A6304FF-6ECB-4EA3-98D8-BDA3D29D745B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,13 @@ Global
 		{AD234B03-CCBA-431A-91E6-E84CB61DCBE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD234B03-CCBA-431A-91E6-E84CB61DCBE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD234B03-CCBA-431A-91E6-E84CB61DCBE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B87955EA-C4F4-4746-8CC8-E1F9085170E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B87955EA-C4F4-4746-8CC8-E1F9085170E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B87955EA-C4F4-4746-8CC8-E1F9085170E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B87955EA-C4F4-4746-8CC8-E1F9085170E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A6304FF-6ECB-4EA3-98D8-BDA3D29D745B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A6304FF-6ECB-4EA3-98D8-BDA3D29D745B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A6304FF-6ECB-4EA3-98D8-BDA3D29D745B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A6304FF-6ECB-4EA3-98D8-BDA3D29D745B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

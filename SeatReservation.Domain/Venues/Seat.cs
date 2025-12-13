@@ -8,26 +8,27 @@ public record SeatId(Guid Value);
 
 public class Seat
 {
-    private Seat(SeatId id, int rowNumber, int seatNumber)
+    private Seat(SeatId id, Venue venue, int rowNumber, int seatNumber)
     {
         Id = id;
         RowNumber = rowNumber;
         SeatNumber = seatNumber;
+        Venue = venue;
     }
 
     public SeatId Id { get; } = null!;
     public int RowNumber { get; private set; }
     public int SeatNumber { get; private set; }
-    public VenueId VenueId { get; private set; } = null!;
+    public Venue Venue { get; private set; } = null!;
 
-    public static Result<Seat, Error> Create(int rowNumber, int seatNumber)
+    public static Result<Seat, Error> Create(Venue venue, int rowNumber, int seatNumber)
     {
         if (rowNumber < 0 || seatNumber < 0)
         {
             return Error.Validation("seat.rowNumber", "Row number cannot be negative", null);
         }
 
-        return new Seat(new SeatId(Guid.NewGuid()), rowNumber, seatNumber);
+        return new Seat(new SeatId(Guid.NewGuid()), venue, rowNumber, seatNumber);
     }
 
     [UsedImplicitly]

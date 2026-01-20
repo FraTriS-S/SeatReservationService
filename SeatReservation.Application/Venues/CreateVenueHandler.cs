@@ -3,7 +3,7 @@ using SeatReservation.Contracts;
 using SeatReservation.Domain.Venues;
 using Shared;
 
-namespace SeatReservation.Application;
+namespace SeatReservation.Application.Venues;
 
 public class CreateVenueHandler
 {
@@ -19,7 +19,7 @@ public class CreateVenueHandler
     /// </summary>
     public async Task<Result<Guid, Error>> Handle(CreateVenueRequest request, CancellationToken cancellationToken)
     {
-        var createVenueResult = Venue.Create(request.Prefix, request.Name, request.SeatsLimit);
+        var createVenueResult = Venue.Create(null, request.Prefix, request.Name, request.SeatsLimit);
 
         if (createVenueResult.IsFailure)
         {

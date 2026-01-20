@@ -26,7 +26,7 @@ public class Venue
     public int SeatsCount => _seats.Count;
     public IReadOnlyList<Seat> Seats => _seats;
 
-    public static Result<Venue, Error> Create(string prefix, string name, int seatsLimit)
+    public static Result<Venue, Error> Create(VenueId? venueId, string prefix, string name, int seatsLimit)
     {
         if (seatsLimit <= 0)
         {
@@ -40,7 +40,7 @@ public class Venue
             return venueNameResult.Error;
         }
 
-        return new Venue(new VenueId(Guid.NewGuid()), venueNameResult.Value, seatsLimit);
+        return new Venue(venueId ?? new VenueId(Guid.NewGuid()), venueNameResult.Value, seatsLimit);
     }
 
     public UnitResult<Error> AddSeat(Seat seat)
@@ -55,7 +55,35 @@ public class Venue
         return UnitResult.Success<Error>();
     }
 
+    public UnitResult<Error> UpdateSeats(IEnumerable<Seat> seats)
+    {
+        var seatsList = seats.ToList();
+
+        if (seatsList.Count > SeatsLimit)
+        {
+            return Error.Conflict("venue.seats.limit", "");
+        }
+
+        _seats = seatsList;
+
+        return UnitResult.Success<Error>();
+    }
+
     public void ExpandSeatsLimit(int newSeatsLimit) => SeatsLimit = newSeatsLimit;
+
+    public UnitResult<Error> UpdateName(string name)
+    {
+        var newVenueNameResult = VenueName.Create(Name.Prefix, name);
+
+        if (newVenueNameResult.IsFailure)
+        {
+            return newVenueNameResult.Error;
+        }
+
+        Name = newVenueNameResult.Value;
+
+        return UnitResult.Success<Error>();
+    }
 
     [UsedImplicitly]
     private Venue()

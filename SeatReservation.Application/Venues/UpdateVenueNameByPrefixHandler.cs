@@ -1,4 +1,5 @@
 using CSharpFunctionalExtensions;
+using SeatReservation.Application.Database;
 using SeatReservation.Contracts;
 using Shared;
 
@@ -6,10 +7,12 @@ namespace SeatReservation.Application.Venues;
 
 public class UpdateVenueNameByPrefixHandler
 {
+    private readonly ITransactionManager _transactionManager;
     private readonly IVenuesRepository _repository;
 
-    public UpdateVenueNameByPrefixHandler(IVenuesRepository repository)
+    public UpdateVenueNameByPrefixHandler(ITransactionManager transactionManager, IVenuesRepository repository)
     {
+        _transactionManager = transactionManager;
         _repository = repository;
     }
 
@@ -27,7 +30,12 @@ public class UpdateVenueNameByPrefixHandler
             }
         }
 
-        await _repository.SaveAsync(cancellationToken);
+        var saveChangesResult = await _transactionManager.SaveChangesAsync(cancellationToken);
+
+        if (saveChangesResult.IsFailure)
+        {
+            return saveChangesResult.Error;
+        }
 
         return UnitResult.Success<Error>();
     }

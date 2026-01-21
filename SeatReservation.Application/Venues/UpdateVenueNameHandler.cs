@@ -1,4 +1,5 @@
 using CSharpFunctionalExtensions;
+using SeatReservation.Application.Database;
 using SeatReservation.Contracts;
 using SeatReservation.Domain.Venues;
 using Shared;
@@ -7,10 +8,12 @@ namespace SeatReservation.Application.Venues;
 
 public class UpdateVenueNameHandler
 {
+    private readonly ITransactionManager _transactionManager;
     private readonly IVenuesRepository _repository;
 
-    public UpdateVenueNameHandler(IVenuesRepository repository)
+    public UpdateVenueNameHandler(ITransactionManager transactionManager, IVenuesRepository repository)
     {
+        _transactionManager = transactionManager;
         _repository = repository;
     }
 
@@ -18,18 +21,26 @@ public class UpdateVenueNameHandler
     {
         var venueId = new VenueId(request.Id);
 
-        var venueResult = await _repository.GetByIdAsync(venueId, cancellationToken);
+        var (_, isFailure, venue, error) = await _repository.GetByIdAsync(venueId, cancellationToken);
 
-        if (venueResult.IsFailure)
+        if (isFailure)
         {
-            return venueResult.Error;
+            return error;
         }
 
-        var venue = venueResult.Value;
+        var updateNameResult = venue.UpdateName(request.Name);
 
-        venue.UpdateName(request.Name);
+        if (updateNameResult.IsFailure)
+        {
+            return updateNameResult.Error;
+        }
 
-        await _repository.SaveAsync(cancellationToken);
+        var saveChangesResult = await _transactionManager.SaveChangesAsync(cancellationToken);
+
+        if (saveChangesResult.IsFailure)
+        {
+            return saveChangesResult.Error;
+        }
 
         return venue.Id.Value;
     }

@@ -2,7 +2,7 @@ using CSharpFunctionalExtensions;
 using SeatReservation.Domain.Venues;
 using Shared;
 
-namespace SeatReservation.Application;
+namespace SeatReservation.Application.Database;
 
 public interface IVenuesRepository
 {
@@ -13,5 +13,4 @@ public interface IVenuesRepository
     Task<Result<Guid, Error>> UpdateVenueName(VenueId id, VenueName name, CancellationToken cancellationToken = default);
     Task<UnitResult<Error>> UpdateVenueNameByPrefix(string prefix, VenueName name, CancellationToken cancellationToken = default);
     Task<UnitResult<Error>> DeleteSeatsByVenueIdAsync(VenueId venueId, CancellationToken cancellationToken = default);
-    Task SaveAsync(CancellationToken cancellationToken = default);
 }

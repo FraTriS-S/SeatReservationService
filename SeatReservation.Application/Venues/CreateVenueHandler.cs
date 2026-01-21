@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using SeatReservation.Application.Database;
 using SeatReservation.Contracts;
 using SeatReservation.Domain.Venues;
 using Shared;
@@ -19,14 +20,12 @@ public class CreateVenueHandler
     /// </summary>
     public async Task<Result<Guid, Error>> Handle(CreateVenueRequest request, CancellationToken cancellationToken)
     {
-        var createVenueResult = Venue.Create(null, request.Prefix, request.Name, request.SeatsLimit);
+        var (_, isFailure, venue, error) = Venue.Create(null, request.Prefix, request.Name, request.SeatsLimit);
 
-        if (createVenueResult.IsFailure)
+        if (isFailure)
         {
-            return createVenueResult.Error;
+            return error;
         }
-
-        var venue = createVenueResult.Value;
 
         foreach (var seatRequest in request.Seats)
         {

@@ -1,4 +1,5 @@
 using CSharpFunctionalExtensions;
+using SeatReservation.Application.Database;
 using SeatReservation.Contracts;
 using SeatReservation.Domain.Venues;
 using Shared;
@@ -7,22 +8,37 @@ namespace SeatReservation.Application.Venues;
 
 public class UpdateVenueSeatsHandler
 {
+    private readonly ITransactionManager _transactionManager;
     private readonly IVenuesRepository _repository;
 
-    public UpdateVenueSeatsHandler(IVenuesRepository repository)
+    public UpdateVenueSeatsHandler(ITransactionManager transactionManager, IVenuesRepository repository)
     {
+        _transactionManager = transactionManager;
         _repository = repository;
     }
 
     public async Task<Result<Guid, Error>> Handle(UpdateVenueSeatsRequest request, CancellationToken cancellationToken)
     {
+        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(cancellationToken);
+
+        if (transactionScopeResult.IsFailure)
+        {
+            return transactionScopeResult.Error;
+        }
+
+        using var transactionScope = transactionScopeResult.Value;
+
         var venueId = new VenueId(request.VenueId);
 
         var venueResult = await _repository.GetByIdAsync(venueId, cancellationToken);
 
         if (venueResult.IsFailure)
         {
-            return venueResult.Error;
+            var rollbackResult = transactionScope.Rollback();
+
+            return rollbackResult.IsFailure
+                ? rollbackResult.Error
+                : venueResult.Error;
         }
 
         List<Seat> seats = [];
@@ -32,17 +48,59 @@ public class UpdateVenueSeatsHandler
 
             if (createSeatResult.IsFailure)
             {
-                return createSeatResult.Error;
+                var rollbackResult = transactionScope.Rollback();
+
+                return rollbackResult.IsFailure
+                    ? rollbackResult.Error
+                    : createSeatResult.Error;
             }
 
             seats.Add(createSeatResult.Value);
         }
 
-        venueResult.Value.UpdateSeats(seats);
+        var updateSeatsResult = venueResult.Value.UpdateSeats(seats);
 
-        await _repository.DeleteSeatsByVenueIdAsync(venueId, cancellationToken);
+        if (updateSeatsResult.IsFailure)
+        {
+            var rollbackResult = transactionScope.Rollback();
 
-        await _repository.SaveAsync(cancellationToken);
+            return rollbackResult.IsFailure
+                ? rollbackResult.Error
+                : updateSeatsResult.Error;
+        }
+
+        var deleteSeatsByVenueIdResult = await _repository.DeleteSeatsByVenueIdAsync(venueId, cancellationToken);
+
+        if (deleteSeatsByVenueIdResult.IsFailure)
+        {
+            var rollbackResult = transactionScope.Rollback();
+
+            return rollbackResult.IsFailure
+                ? rollbackResult.Error
+                : deleteSeatsByVenueIdResult.Error;
+        }
+
+        var saveChangesResult = await _transactionManager.SaveChangesAsync(cancellationToken);
+
+        if (saveChangesResult.IsFailure)
+        {
+            var rollbackResult = transactionScope.Rollback();
+
+            return rollbackResult.IsFailure
+                ? rollbackResult.Error
+                : saveChangesResult.Error;
+        }
+
+        var commitResult = transactionScope.Commit();
+
+        if (commitResult.IsFailure)
+        {
+            var rollbackResult = transactionScope.Rollback();
+
+            return rollbackResult.IsFailure
+                ? rollbackResult.Error
+                : commitResult.Error;
+        }
 
         return venueId.Value;
     }

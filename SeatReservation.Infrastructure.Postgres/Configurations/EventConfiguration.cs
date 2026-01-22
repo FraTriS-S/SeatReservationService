@@ -15,10 +15,13 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
         builder.HasKey(x => x.Id).HasName("pk_events");
 
         builder.Property(x => x.Id).HasColumnName("id")
-            .HasConversion(eventId => eventId.Value, id => new EventId(id));
-        builder.Property(x => x.VenueId).HasColumnName("venue_id");
-        builder.Property(x => x.Name).HasColumnName("name");
-        builder.Property(x => x.EventDate).HasColumnName("event_date");
+            .HasConversion(eventId => eventId.Value, id => new EventId(id)).IsRequired();
+        builder.Property(x => x.VenueId).HasColumnName("venue_id").IsRequired();
+        builder.Property(x => x.Name).HasColumnName("name").IsRequired();
+        builder.Property(x => x.EventDate).HasColumnName("event_date").IsRequired();
+        builder.Property(x => x.StartDate).HasColumnName("start_date").IsRequired();
+        builder.Property(x => x.EndDate).HasColumnName("end_date").IsRequired();
+        builder.Property(x => x.Status).HasConversion<string>().HasColumnName("status").IsRequired();
         builder.Property(x => x.Type).HasConversion<string>().HasColumnName("type").IsRequired();
         builder.Property(x => x.Info).HasConversion(new EventInfoValueConverter()).HasColumnName("info").IsRequired();
 

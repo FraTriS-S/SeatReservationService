@@ -17,6 +17,7 @@ public class ReservationSeatConfiguration : IEntityTypeConfiguration<Reservation
             .HasConversion(reservationSeatId => reservationSeatId.Value, id => new ReservationSeatId(id));
 
         builder.Property(x => x.SeatId).HasColumnName("seat_id").IsRequired();
+        builder.Property(x => x.ReservedAt).HasColumnName("reserved_at").IsRequired();
 
         builder.HasOne(x => x.Reservation)
             .WithMany(x => x.ReservedSeats)

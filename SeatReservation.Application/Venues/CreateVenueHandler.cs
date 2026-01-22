@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using SeatReservation.Application.Database;
 using SeatReservation.Contracts;
 using SeatReservation.Domain.Venues;
 using Shared;
@@ -44,7 +43,7 @@ public class CreateVenueHandler
             }
         }
 
-        await _venuesRepository.Add(venue, cancellationToken);
+        await _venuesRepository.AddAsync(venue, cancellationToken);
 
         return venue.Id.Value;
     }

@@ -1,5 +1,7 @@
+using CSharpFunctionalExtensions;
 using JetBrains.Annotations;
 using SeatReservation.Domain.Venues;
+using Shared;
 
 namespace SeatReservation.Domain.Reservations;
 
@@ -29,6 +31,23 @@ public class Reservation
     public ReservationStatus Status { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public IReadOnlyList<ReservationSeat> ReservedSeats => _reservedSeats;
+
+    public static Result<Reservation, Error> Create(Guid eventId, Guid userId, IEnumerable<Guid> seatsIds)
+    {
+        if (eventId == Guid.Empty)
+        {
+            return Error.Validation("reservation.eventId", "EventId cannot be empty");
+        }
+
+        if (userId == Guid.Empty)
+        {
+            return Error.Validation("reservation.userId", "UserId cannot be empty");
+        }
+
+        var reservationId = new ReservationId(eventId);
+
+        return new Reservation(reservationId, eventId, userId, seatsIds);
+    }
 
     [UsedImplicitly]
     private Reservation()

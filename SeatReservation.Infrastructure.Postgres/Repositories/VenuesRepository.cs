@@ -1,7 +1,7 @@
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SeatReservation.Application.Database;
+using SeatReservation.Application.Venues;
 using SeatReservation.Domain.Venues;
 using Shared;
 
@@ -54,7 +54,7 @@ public class VenuesRepository : IVenuesRepository
         return venues;
     }
 
-    public async Task<Result<Guid, Error>> Add(Venue venue, CancellationToken cancellationToken = default)
+    public async Task<Result<Guid, Error>> AddAsync(Venue venue, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -72,7 +72,7 @@ public class VenuesRepository : IVenuesRepository
         }
     }
 
-    public async Task<Result<Guid, Error>> UpdateVenueName(VenueId id, VenueName name, CancellationToken cancellationToken = default)
+    public async Task<Result<Guid, Error>> UpdateVenueNameAsync(VenueId id, VenueName name, CancellationToken cancellationToken = default)
     {
         // todo: сдедать через это хоть один метод для примера
         // await _dbContext.Database
@@ -90,7 +90,7 @@ public class VenuesRepository : IVenuesRepository
         return id.Value;
     }
 
-    public async Task<UnitResult<Error>> UpdateVenueNameByPrefix(string prefix, VenueName name, CancellationToken cancellationToken = default)
+    public async Task<UnitResult<Error>> UpdateVenueNameByPrefixAsync(string prefix, VenueName name, CancellationToken cancellationToken = default)
     {
         // Сохранение идет сразу через ExecuteUpdate
         await _dbContext.Venues

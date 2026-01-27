@@ -13,6 +13,13 @@ public class EventDetails
     public EventId EventId { get; } = null!;
     public int Capacity { get; private set; }
     public string Description { get; private set; } = null!;
+    public DateTime? LastReservationDateTime { get; private set; }
+    public uint Version { get; private set; }
+
+    public void ReserveSeat()
+    {
+        LastReservationDateTime = DateTime.UtcNow;
+    }
 
     [UsedImplicitly]
     private EventDetails()

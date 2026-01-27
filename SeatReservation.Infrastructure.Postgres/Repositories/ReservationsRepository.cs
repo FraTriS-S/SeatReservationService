@@ -43,4 +43,21 @@ public class ReservationsRepository : IReservationsRepository
             .Where(reservation => reservation.EventId == eventId)
             .Where(reservation => reservation.ReservedSeats.Any(reservationSeat => seatIds.Contains(reservationSeat.SeatId)))
             .AnyAsync(cancellationToken);
+
+    public async Task<int> GetReservedSeatsCount(Guid eventId, CancellationToken cancellationToken = default)
+    {
+        // Пессимистичная блокировка (потому что всегда рассчитываем что нужно блокировать),
+        // блокируем поле c ожиданием
+        // await _dbContext.Database.ExecuteSqlAsync(
+        //     $"SELECT capacity FROM events_details WHERE event_id = {eventId} FOR UPDATE", cancellationToken);
+        // блокируем поле c ошибкой
+        // await _dbContext.Database.ExecuteSqlAsync(
+        //     $"SELECT capacity FROM events_details WHERE event_id = {eventId} FOR UPDATE NOWAIT", cancellationToken);
+
+        return await _dbContext.Reservations
+            .Where(reservation => reservation.EventId == eventId)
+            .Where(reservation => reservation.Status == ReservationStatus.Confirmed || reservation.Status == ReservationStatus.Pending)
+            .SelectMany(x => x.ReservedSeats)
+            .CountAsync(cancellationToken);
+    }
 }

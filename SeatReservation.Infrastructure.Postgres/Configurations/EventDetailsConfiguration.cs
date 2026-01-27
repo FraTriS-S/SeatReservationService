@@ -16,6 +16,9 @@ public class EventDetailsConfiguration : IEntityTypeConfiguration<EventDetails>
             .HasConversion(eventId => eventId.Value, id => new EventId(id));
         builder.Property(x => x.Capacity).HasColumnName("capacity");
         builder.Property(x => x.Description).HasColumnName("description");
+        builder.Property(x => x.LastReservationDateTime).HasColumnName("last_reservation_date_time");
+
+        builder.Property(b => b.Version).IsRowVersion();
 
         builder.HasOne<Event>()
             .WithOne(x => x.Details)

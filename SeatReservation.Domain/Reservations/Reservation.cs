@@ -20,7 +20,7 @@ public class Reservation
         CreatedAt = DateTime.UtcNow;
 
         var reservedSeats = seatsIds
-            .Select(seatId => new ReservationSeat(new ReservationSeatId(Guid.NewGuid()), this, new SeatId(seatId)))
+            .Select(seatId => new ReservationSeat(new ReservationSeatId(Guid.NewGuid()), this, new SeatId(seatId), eventId))
             .ToList();
         _reservedSeats = reservedSeats;
     }
@@ -44,7 +44,7 @@ public class Reservation
             return Error.Validation("reservation.userId", "UserId cannot be empty");
         }
 
-        var reservationId = new ReservationId(eventId);
+        var reservationId = new ReservationId(Guid.NewGuid());
 
         return new Reservation(reservationId, eventId, userId, seatsIds);
     }

@@ -44,7 +44,8 @@ public class Event
     public DateTime EndDate { get; private set; }
     public EventStatus Status { get; private set; }
 
-    public bool IsAvailableForReservation() => Status == EventStatus.Planned && StartDate > DateTime.UtcNow;
+    public bool IsAvailableForReservation(int capacitySum) =>
+        Status == EventStatus.Planned && StartDate > DateTime.UtcNow && capacitySum <= Details.Capacity;
 
     private static Result<EventDetails, Error> Validate(
         string name, DateTime eventDate, DateTime startDate, DateTime endDate, int capacity, string description)

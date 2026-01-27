@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SeatReservation.Infrastructure.Postgres;
@@ -12,9 +13,11 @@ using SeatReservation.Infrastructure.Postgres;
 namespace SeatReservation.Infrastructure.Postgres.Migrations
 {
     [DbContext(typeof(SeatReservationDbContext))]
-    partial class SeatReservationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260123101700_AddIndex")]
+    partial class AddIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,16 +90,6 @@ namespace SeatReservation.Infrastructure.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
-
-                    b.Property<DateTime?>("LastReservationDateTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_reservation_date_time");
-
-                    b.Property<uint>("Version")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("xid")
-                        .HasColumnName("xmin");
 
                     b.HasKey("EventId")
                         .HasName("pk_events_details");

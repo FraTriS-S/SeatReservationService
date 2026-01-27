@@ -1,4 +1,6 @@
+using System.Data;
 using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using SeatReservation.Application.Database;
@@ -19,11 +21,12 @@ public class TransactionManager : ITransactionManager
         _context = context;
     }
 
-    public async Task<Result<ITransactionScope, Error>> BeginTransactionAsync(CancellationToken cancellationToken = default)
+    public async Task<Result<ITransactionScope, Error>> BeginTransactionAsync(
+        CancellationToken cancellationToken = default, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
         try
         {
-            var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+            var transaction = await _context.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
 
             var transactionScopeLogger = _loggerFactory.CreateLogger<TransactionScope>();
 

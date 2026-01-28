@@ -32,6 +32,7 @@ public class SeatReservationDbContext : DbContext
 
     public DbSet<Event> Events => Set<Event>();
     public DbSet<Reservation> Reservations => Set<Reservation>();
+    public DbSet<ReservationSeat> ReservationSeats => Set<ReservationSeat>();
     public DbSet<Venue> Venues => Set<Venue>();
     public DbSet<Seat> Seats => Set<Seat>();
 

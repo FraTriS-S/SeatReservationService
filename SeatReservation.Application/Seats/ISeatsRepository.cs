@@ -1,3 +1,4 @@
+using SeatReservation.Domain.Events;
 using SeatReservation.Domain.Venues;
 
 namespace SeatReservation.Application.Seats;
@@ -5,4 +6,5 @@ namespace SeatReservation.Application.Seats;
 public interface ISeatsRepository
 {
     Task<IReadOnlyList<Seat>> GetByIdsAsync(IEnumerable<SeatId> seatIds, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<Seat>> GetAvailableSeats(VenueId venueId, EventId eventId, int? rowNumber, CancellationToken cancellationToken = default);
 }

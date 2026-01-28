@@ -23,4 +23,20 @@ public class ReservationsController : ControllerBase
 
         return Ok(result.Value);
     }
+
+    [HttpPost("adjacent")]
+    public async Task<IActionResult> ReserveAdjacentSeats(
+        [FromServices] ReserveAdjacentSeatsHandler handler,
+        [FromBody] ReserveAdjacentSeatsRequest request,
+        CancellationToken cancellationToken)
+    {
+        var result = await handler.Handle(request, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
 }

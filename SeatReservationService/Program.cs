@@ -26,6 +26,7 @@ builder.Services.AddScoped<ISeatsRepository, SeatsRepository>();
 builder.Services.AddScoped<IVenuesRepository, VenuesRepository>();
 
 builder.Services.AddScoped<CreateReservationHandler>();
+builder.Services.AddScoped<ReserveAdjacentSeatsHandler>();
 
 builder.Services.AddScoped<CreateVenueHandler>();
 builder.Services.AddScoped<UpdateVenueNameHandler>();

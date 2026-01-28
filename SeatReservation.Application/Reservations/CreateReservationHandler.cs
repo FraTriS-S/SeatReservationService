@@ -44,7 +44,7 @@ public class CreateReservationHandler
 
         var eventId = new EventId(request.EventId);
 
-        var (_, isFailure, @event, error) = await _eventsRepository.GetByIdAsync(eventId, cancellationToken);
+        var (_, isFailure, @event, error) = await _eventsRepository.GetByIdWithLockAsync(eventId, cancellationToken);
 
         if (isFailure)
         {

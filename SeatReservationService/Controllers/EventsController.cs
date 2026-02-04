@@ -18,4 +18,15 @@ public class EventsController : ControllerBase
         var result = await handler.Handle(request, cancellationToken);
         return Ok(result);
     }
+
+    [HttpGet("{eventId:guid}/dapper")]
+    public async Task<IActionResult> GetById(
+        [FromRoute] Guid eventId,
+        [FromServices] GetEventByIdDapperQueryHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var request = new GetEventByIdQuery(eventId);
+        var result = await handler.Handle(request, cancellationToken);
+        return Ok(result);
+    }
 }

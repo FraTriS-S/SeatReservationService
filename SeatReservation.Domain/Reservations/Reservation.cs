@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using JetBrains.Annotations;
+using SeatReservation.Domain.Events;
 using SeatReservation.Domain.Venues;
 using Shared;
 
@@ -20,7 +21,8 @@ public class Reservation
         CreatedAt = DateTime.UtcNow;
 
         var reservedSeats = seatsIds
-            .Select(seatId => new ReservationSeat(new ReservationSeatId(Guid.NewGuid()), this, new SeatId(seatId), eventId))
+            .Select(seatId => new ReservationSeat(
+                new ReservationSeatId(Guid.NewGuid()), this, new SeatId(seatId), new EventId(eventId)))
             .ToList();
         _reservedSeats = reservedSeats;
     }

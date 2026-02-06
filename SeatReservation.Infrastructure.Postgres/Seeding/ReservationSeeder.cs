@@ -247,7 +247,7 @@ public class ReservationSeeder : ISeeder
         for (var i = 0; i < EVENTS_COUNT; i++)
         {
             var venue = venueIds[_random.Next(venueIds.Count)];
-            var eventType = (EventType)_random.Next(1, 3);
+            var eventType = (EventType)_random.Next(1, 4);
             var eventDate = DateTime.UtcNow.AddDays(_random.Next(1, 365));
             var startDate = eventDate.AddHours(_random.Next(-2, 3));
             var endDate = startDate.AddHours(_random.Next(1, 8));

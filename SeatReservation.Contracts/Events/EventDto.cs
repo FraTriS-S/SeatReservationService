@@ -1,8 +1,6 @@
-using SeatReservation.Contracts.Seats;
-
 namespace SeatReservation.Contracts.Events;
 
-public class GetEventByIdResponse
+public record EventDto
 {
     public Guid Id { get; init; }
     public Guid VenueId { get; init; }
@@ -19,5 +17,4 @@ public class GetEventByIdResponse
     public int TotalSeats { get; init; }
     public int ReservedSeats { get; init; }
     public int AvailableSeats { get; init; }
-    public List<AvailableSeatDto> Seats { get; init; } = [];
 }

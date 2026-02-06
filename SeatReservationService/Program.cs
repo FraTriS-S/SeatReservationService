@@ -36,6 +36,8 @@ builder.Services.AddScoped<IVenuesRepository, VenuesRepository>();
 
 builder.Services.AddScoped<GetEventByIdQueryHandler>();
 builder.Services.AddScoped<GetEventByIdDapperQueryHandler>();
+builder.Services.AddScoped<GetEventsQueryHandler>();
+builder.Services.AddScoped<GetEventsDapperQueryHandler>();
 
 builder.Services.AddScoped<CreateReservationHandler>();
 builder.Services.AddScoped<ReserveAdjacentSeatsHandler>();

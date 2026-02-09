@@ -1,6 +1,8 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using SeatReservation.Application.Database;
 using SeatReservation.Contracts.Events;
+using SeatReservation.Domain.Events;
 using SeatReservation.Domain.Reservations;
 using SeatReservation.Domain.Venues;
 
@@ -60,9 +62,23 @@ public class GetEventsQueryHandler
                 >= query.MinAvailableSeats.Value);
         }
 
-        eventsQuery = eventsQuery
-            .OrderByDescending(@event => @event.EventDate)
-            .ThenBy(@event => @event.Id);
+        Expression<Func<Event, object>> keySelector = query.SortBy?.ToLower() switch
+        {
+            "date" => @event => @event.EventDate,
+            "name" => @event => @event.Name,
+            "status" => @event => @event.Status,
+            "type" => @event => @event.Type,
+            "popularity" => @event =>
+                (double)_dbContext.ReservationSeatsRead.Count(reservationSeat => reservationSeat.EventId == @event.Id &&
+                                                                                 (reservationSeat.Reservation.Status == ReservationStatus.Confirmed ||
+                                                                                  reservationSeat.Reservation.Status == ReservationStatus.Pending)) /
+                _dbContext.SeatsRead.Count(seat => seat.VenueId == @event.VenueId) * 100,
+            _ => @event => @event.EventDate
+        };
+
+        eventsQuery = query.SortDirection?.ToLower() == "asc"
+            ? eventsQuery.OrderBy(keySelector).ThenBy(@event => @event.Id)
+            : eventsQuery.OrderByDescending(keySelector).ThenBy(@event => @event.Id);
 
         var totalCount = await eventsQuery.LongCountAsync(cancellationToken);
 
@@ -87,11 +103,18 @@ public class GetEventsQueryHandler
                 EndDate = @event.EndDate,
                 Status = @event.Status.ToString(),
                 TotalSeats = _dbContext.SeatsRead.Count(seat => seat.VenueId == @event.VenueId),
-                ReservedSeats = _dbContext.ReservationSeatsRead.Count(reservationSeat => reservationSeat.EventId == @event.Id),
+                ReservedSeats = _dbContext.ReservationSeatsRead.Count(reservationSeat => reservationSeat.EventId == @event.Id &&
+                                                                                         (reservationSeat.Reservation.Status == ReservationStatus.Confirmed ||
+                                                                                          reservationSeat.Reservation.Status == ReservationStatus.Pending)),
                 AvailableSeats = _dbContext.SeatsRead.Count(seat => seat.VenueId == @event.VenueId) -
                                  _dbContext.ReservationSeatsRead.Count(reservationSeat => reservationSeat.EventId == @event.Id &&
                                                                                           (reservationSeat.Reservation.Status == ReservationStatus.Confirmed ||
-                                                                                           reservationSeat.Reservation.Status == ReservationStatus.Pending))
+                                                                                           reservationSeat.Reservation.Status == ReservationStatus.Pending)),
+                PopularityPercentage = Math.Round(
+                    (double)_dbContext.ReservationSeatsRead.Count(reservationSeat => reservationSeat.EventId == @event.Id &&
+                                                                                     (reservationSeat.Reservation.Status == ReservationStatus.Confirmed ||
+                                                                                      reservationSeat.Reservation.Status == ReservationStatus.Pending)) /
+                    _dbContext.SeatsRead.Count(seat => seat.VenueId == @event.VenueId) * 100, 2)
             })
             .ToListAsync(cancellationToken: cancellationToken);
 

@@ -61,7 +61,7 @@ public class GetEventsQueryHandler
         }
 
         eventsQuery = eventsQuery
-            .OrderBy(@event => @event.EventDate)
+            .OrderByDescending(@event => @event.EventDate)
             .ThenBy(@event => @event.Id);
 
         var totalCount = await eventsQuery.LongCountAsync(cancellationToken);

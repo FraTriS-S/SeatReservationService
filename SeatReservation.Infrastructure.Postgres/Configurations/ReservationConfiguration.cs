@@ -16,7 +16,7 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
             .HasConversion(reservationId => reservationId.Value, id => new ReservationId(id));
         builder.Property(x => x.UserId).HasColumnName("user_id");
         builder.Property(x => x.EventId).HasColumnName("event_id");
-        builder.Property(x => x.Status).HasColumnName("status");
+        builder.Property(x => x.Status).HasConversion<string>().HasColumnName("status").IsRequired();
         builder.Property(x => x.CreatedAt).HasColumnName("created_at");
     }
 }

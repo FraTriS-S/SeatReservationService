@@ -40,13 +40,13 @@ public class EventsController : ControllerBase
         return Ok(result);
     }
 
-    // [HttpGet("dapper")]
-    // public async Task<IActionResult> GetById(
-    //     [FromQuery] GetEventsQuery query,
-    //     [FromServices] GetEventsDapperHandler handler,
-    //     CancellationToken cancellationToken)
-    // {
-    //     var result = await handler.Handle(query, cancellationToken);
-    //     return Ok(result);
-    // }
+    [HttpGet("dapper")]
+    public async Task<IActionResult> GetById(
+        [FromQuery] GetEventsQuery query,
+        [FromServices] GetEventsDapperQueryHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var result = await handler.Handle(query, cancellationToken);
+        return Ok(result);
+    }
 }

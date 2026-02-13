@@ -18,5 +18,7 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
         builder.Property(x => x.EventId).HasColumnName("event_id");
         builder.Property(x => x.Status).HasConversion<string>().HasColumnName("status").IsRequired();
         builder.Property(x => x.CreatedAt).HasColumnName("created_at");
+
+        builder.HasIndex(x => new { x.EventId, x.Status }).HasFilter("status IN ('Confirmed','Pending')");
     }
 }

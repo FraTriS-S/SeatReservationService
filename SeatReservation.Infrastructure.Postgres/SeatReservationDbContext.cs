@@ -41,6 +41,8 @@ public class SeatReservationDbContext : DbContext, IReadDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(SeatReservationDbContext).Assembly);
+
+        modelBuilder.HasPostgresExtension("pg_trgm");
     }
 
     private ILoggerFactory CreateLoggerFactory() =>

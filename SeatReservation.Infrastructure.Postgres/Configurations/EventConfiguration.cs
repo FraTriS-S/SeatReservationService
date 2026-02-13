@@ -30,5 +30,14 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
             .HasForeignKey(x => x.VenueId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
+
+        // на даты хорошо создавать индексы, так как высокая селективность
+        builder.HasIndex(x => x.EventDate);
+
+        // для ускорения фильтрации через Like
+        builder.HasIndex(x => x.Name)
+            .HasDatabaseName("ix_events_name_trgm")
+            .HasMethod("gin")
+            .HasOperators("gin_trgm_ops");
     }
 }
